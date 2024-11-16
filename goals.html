@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FIND | Goal Tracking</title>
+    <link rel="stylesheet" href="goals.css" />
+  </head>
+  <body>
+    <header class="goal-header">
+      <h1>Goal Tracking</h1>
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="tracker.html">Expense Tracker</a>
+        <a href="dashboard.html">Dashboard</a>
+      </nav>
+    </header>
+
+    <main class="goal-container">
+      <h2>Your Goals</h2>
+
+      <!-- Display current goals -->
+      <div class="goal-list" id="goalList"></div>
+
+      <h3>Add a New Goal</h3>
+      <form id="goalForm">
+        <input type="text" id="goalName" placeholder="Goal Name" required />
+        <input
+          type="number"
+          id="goalAmount"
+          placeholder="Target Amount (Rs.)"
+          required
+        />
+        <button type="submit">Add Goal</button>
+      </form>
+
+      <h3>Gamification Rewards</h3>
+      <div class="rewards-container">
+        <p>Total Points: <span id="pointsDisplay">0</span></p>
+        <p id="rewardMessage">Keep working towards your goals to earn rewards!</p>
+      </div>
+    </main>
+
+    <script src="goals.js"></script>
+  </body>
+</html>

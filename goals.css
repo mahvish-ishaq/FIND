@@ -1,0 +1,185 @@
+/* Body and General Layout */
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f4f7f6;
+  margin: 0;
+  padding: 0;
+}
+
+.goal-header {
+  background-color: #4caf50;
+  color: white;
+  text-align: center;
+  padding: 20px 0;
+}
+
+.goal-header h1 {
+  font-size: 36px;
+  margin: 0;
+}
+
+.goal-header nav {
+  margin-top: 10px;
+}
+
+.goal-header nav a {
+  margin: 0 20px;
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 18px;
+  transition: color 0.3s ease;
+}
+
+.goal-header nav a:hover {
+  color: #e0e0e0;
+}
+
+/* Goal Container */
+.goal-container {
+  width: 80%;
+  margin: 0 auto;
+  text-align: center;
+  background-color: white;
+  padding: 40px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  font-size: 28px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+form input {
+  padding: 12px;
+  width: 250px;
+  margin: 15px 0;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+form button {
+  padding: 12px 25px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+form button:hover {
+  background-color: #45a049;
+}
+
+.rewards-container {
+  margin-top: 40px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.rewards-container p {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+#rewardMessage {
+  font-size: 20px;
+  color: #4caf50;
+  margin-top: 15px;
+}
+
+/* Goal List */
+.goal-list {
+  margin-top: 30px;
+  text-align: left;
+}
+
+.goal-item {
+  background-color: #f9f9f9;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  border-left: 5px solid #4caf50;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.goal-item p {
+  font-size: 16px;
+  margin: 8px 0;
+  color: #333;
+}
+
+.goal-item button {
+  padding: 8px 15px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-right: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.goal-item button:hover {
+  background-color: #45a049;
+}
+
+.goal-item button.remove {
+  background-color: #ff4d4d;
+}
+
+.goal-item button.remove:hover {
+  background-color: #e60000;
+}
+
+/* Goal Form Styling */
+form {
+  margin-bottom: 40px;
+}
+
+/* Transition Effects */
+.goal-item, .rewards-container {
+  transition: transform 0.3s ease-in-out;
+}
+
+.goal-item:hover, .rewards-container:hover {
+  transform: scale(1.05);
+}
+
+/* Hover effects on links */
+.goal-header nav a {
+  transition: color 0.3s ease;
+}
+
+.goal-header nav a:hover {
+  color: #e0e0e0;
+}
+
+/* Media Queries for responsiveness */
+@media (max-width: 768px) {
+  .goal-container {
+    width: 90%;
+    padding: 30px;
+  }
+
+  form input {
+    width: 100%;
+  }
+
+  .goal-header nav a {
+    font-size: 16px;
+  }
+
+  .goal-item button {
+    padding: 8px 10px;
+  }
+}

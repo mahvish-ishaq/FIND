@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="dashboard.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.1/dist/chart.umd.min.js"></script>
+    <title>FIND | Financial Dashboard</title>
+</head>
+<body>
+    <header class="dashboard-header">
+        <h1>Financial Dashboard</h1>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="tracker.html">Expense Tracker</a>
+            <a href="goals.html">Goal Tracking</a>
+        </nav>
+    </header>
+
+    <main class="dashboard-container">
+        <section class="overview">
+            <h2>Overview</h2>
+            <div class="stats">
+                <div class="stat">
+                    <h3>Total Income</h3>
+                    <p id="totalIncome">Rs. 0.00</p>
+                </div>
+                <div class="stat">
+                    <h3>Total Expenses</h3>
+                    <p id="totalExpenses">Rs. 0.00</p>
+                </div>
+                <div class="stat">
+                    <h3>Savings</h3>
+                    <p id="totalSavings">Rs. 0.00</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="charts">
+            <h2>Expense Breakdown</h2>
+            <canvas id="expenseChart"></canvas>
+        </section>
+    </main>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>
