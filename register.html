@@ -35,7 +35,7 @@
                 <div class="terms">
                     <label>
                         <input type="checkbox" name="terms" required>
-                        I agree to the <a href="#">terms and conditions</a>.
+                        I agree to the <a href="#" id="termsLink">terms and conditions</a>.
                     </label>
                 </div>
                 <!-- Register Button -->
@@ -45,8 +45,45 @@
             </form>
         </div>
     </div>
+     <!-- Modal -->
+     <div id="termsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Terms and Conditions</h2>
+                <button class="close-btn" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>1) Your financial data will be stored securely and will not be shared without consent.</p>
+                <p>2) You are responsible for the accuracy of the data provided.</p>
+                <p>3) The advice provided by FIND is for informational purposes only and should not replace professional consultation.</p>
+                <p>4) FIND reserves the right to update its features and terms at any time.</p>
+                <p>5) Users must comply with all applicable laws while using the platform.</p>
+                <p>6) Unauthorized access or misuse of FIND is strictly prohibited.</p>
+            </div>
+        </div>
+    </div>
+
 
     <script>
+        // Modal functionality
+        const termsLink = document.getElementById("termsLink");
+        const termsModal = document.getElementById("termsModal");
+        const closeModal = document.getElementById("closeModal");
+
+        termsLink.addEventListener("click", function (e) {
+            e.preventDefault(); // Prevent default link behavior
+            termsModal.style.display = "block"; // Show modal
+        });
+
+        closeModal.addEventListener("click", function () {
+            termsModal.style.display = "none"; // Close modal
+        });
+
+        window.addEventListener("click", function (e) {
+            if (e.target === termsModal) {
+                termsModal.style.display = "none"; // Close modal on outside click
+            }
+        });
         document.getElementById("registerForm").addEventListener("submit", function (e) {
             e.preventDefault(); // Prevent form submission
 
