@@ -1,0 +1,38 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: find-mongo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: find-mongo
+  template:
+    metadata:
+      labels:
+        app: find-mongo
+    spec:
+      containers:
+        - name: mongo
+          image: mongo:7
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+            - name: mongo-data
+              mountPath: /data/db
+      volumes:
+        - name: mongo-data
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo
+spec:
+  selector:
+    app: find-mongo
+  ports:
+    - port: 27017
+      targetPort: 27017
