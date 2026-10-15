@@ -1,4 +1,3 @@
-// DOM Elements
 const form = document.getElementById("form");
 const textInput = document.getElementById("text");
 const amountInput = document.getElementById("amount");
@@ -8,95 +7,130 @@ const creditDisplay = document.getElementById("show_credit");
 const debitDisplay = document.getElementById("show_debit");
 const listDisplay = document.getElementById("list");
 
-let transactions = JSON.parse(localStorage.getItem("transactions")) || [];
-let totalIncome = 0;
-let totalExpense = 0;
+let transactions = [];
 
-// Event Listener for form submit
-form.addEventListener("submit", function (e) {
+async function loadTransactions() {
+  try {
+    const response = await fetch("/api/transactions");
+    if (!response.ok) throw new Error("Could not load transactions");
+
+    const data = await response.json();
+
+    // Convert backend income/expense to the existing credit/debit labels.
+    transactions = data.map(item => ({
+      ...item,
+      id: item._id,
+      amount: Number(item.amount),
+      type: item.type === "income" ? "credit" : "debit"
+    }));
+
+    updateBalance();
+    renderTransactionHistory();
+  } catch (error) {
+    console.error(error);
+    alert("Could not load transactions. Please check that the backend and MongoDB are running.");
+  }
+}
+
+form.addEventListener("submit", async function (e) {
   e.preventDefault();
-  const description = textInput.value;
-  const amount = parseFloat(amountInput.value);
+
+  const description = textInput.value.trim();
+  const amount = Number(amountInput.value);
   const type = expSelect.value;
 
-  if (description && !isNaN(amount)) {
-    // Create a new transaction object
-    const newTransaction = {
-      id: Math.floor(Math.random() * 1000000),
-      description,
-      amount,
-      type,
-    };
+  if (!description || !Number.isFinite(amount) || amount <= 0) {
+    alert("Please enter a description and a valid amount.");
+    return;
+  }
 
-    // Add the new transaction to the list of transactions
-    transactions.push(newTransaction);
+  try {
+    const response = await fetch("/api/transactions", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        description,
+        amount,
+        type: type === "credit" ? "income" : "expense"
+      })
+    });
 
-    // Update localStorage
-    localStorage.setItem("transactions", JSON.stringify(transactions));
+    const result = await response.json();
 
-    // Update the balance and income/expense values
-    updateBalance();
+    if (!response.ok) {
+      throw new Error(result.error || "Could not save transaction");
+    }
 
-    // Update the transaction history
-    renderTransactionHistory();
-
-    // Clear the form
     textInput.value = "";
     amountInput.value = "";
-  } else {
-    alert("Please enter valid data.");
+    await loadTransactions();
+  } catch (error) {
+    console.error(error);
+    alert("Transaction could not be saved. Check the backend and MongoDB.");
   }
 });
 
-// Function to update the balance, income, and expense
 function updateBalance() {
-  totalIncome = 0;
-  totalExpense = 0;
+  let totalIncome = 0;
+  let totalExpense = 0;
 
-  // Loop through the transactions and calculate the income and expenses
-  transactions.forEach((transaction) => {
+  transactions.forEach(transaction => {
     if (transaction.type === "credit") {
       totalIncome += transaction.amount;
-    } else if (transaction.type === "debit") {
+    } else {
       totalExpense += transaction.amount;
     }
   });
 
-  const totalBalance = totalIncome - totalExpense;
-  balanceDisplay.innerHTML = `Rs. ${totalBalance.toFixed(2)}`;
-  creditDisplay.innerHTML = `Rs. ${totalIncome.toFixed(2)}`;
-  debitDisplay.innerHTML = `Rs. ${totalExpense.toFixed(2)}`;
+  balanceDisplay.textContent =
+    `Rs. ${(totalIncome - totalExpense).toFixed(2)}`;
+  creditDisplay.textContent = `Rs. ${totalIncome.toFixed(2)}`;
+  debitDisplay.textContent = `Rs. ${totalExpense.toFixed(2)}`;
 }
 
-// Function to render the transaction history
 function renderTransactionHistory() {
   listDisplay.innerHTML = "";
 
-  // Loop through the transactions and create list items
-  transactions.forEach((transaction) => {
-    const listItem = document.createElement("li");
-    listItem.classList.add(transaction.type === "credit" ? "plus" : "minus");
-    listItem.innerHTML = `
-      ${transaction.description} <span>Rs. ${transaction.amount.toFixed(2)}</span>
-      <button class="delete-btn" onclick="deleteTransaction(${transaction.id})">x</button>
-    `;
-    listDisplay.appendChild(listItem);
+  transactions.forEach(transaction => {
+    const item = document.createElement("li");
+    item.classList.add(
+      transaction.type === "credit" ? "plus" : "minus"
+    );
+
+    const description = document.createElement("span");
+    description.textContent = transaction.description;
+
+    const amount = document.createElement("span");
+    amount.textContent = `Rs. ${transaction.amount.toFixed(2)}`;
+
+    const deleteButton = document.createElement("button");
+    deleteButton.className = "delete-btn";
+    deleteButton.textContent = "x";
+    deleteButton.addEventListener("click", () => {
+      deleteTransaction(transaction.id);
+    });
+
+    item.append(description, amount, deleteButton);
+    listDisplay.appendChild(item);
   });
 }
 
-// Function to delete a transaction
-function deleteTransaction(id) {
-  // Filter out the transaction from the array
-  transactions = transactions.filter((transaction) => transaction.id !== id);
+async function deleteTransaction(id) {
+  try {
+    const response = await fetch(`/api/transactions/${id}`, {
+      method: "DELETE"
+    });
 
-  // Update localStorage
-  localStorage.setItem("transactions", JSON.stringify(transactions));
+    const result = await response.json();
+    if (!response.ok) {
+      throw new Error(result.error || "Could not delete transaction");
+    }
 
-  // Re-render the balance and history
-  updateBalance();
-  renderTransactionHistory();
+    await loadTransactions();
+  } catch (error) {
+    console.error(error);
+    alert("Could not delete transaction. Please try again.");
+  }
 }
 
-// Initial render
-updateBalance();
-renderTransactionHistory();
+loadTransactions();

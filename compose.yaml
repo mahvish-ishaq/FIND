@@ -1,5 +1,13 @@
-
 services:
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    network_mode: host
+    depends_on:
+      - app
+    restart: unless-stopped
+
   app:
     build: .
     network_mode: host
